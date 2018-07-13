@@ -11,12 +11,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JEditorPane;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -81,11 +83,12 @@ public class sacpad_1 extends javax.swing.JFrame {
         jMenu7 = new javax.swing.JMenu();
         jMenu8 = new javax.swing.JMenu();
         jMenuItem18 = new javax.swing.JMenuItem();
+        fileChooser = new javax.swing.JFileChooser();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         NewFile = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
+        Open = new javax.swing.JMenuItem();
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem4 = new javax.swing.JMenuItem();
         jMenuItem28 = new javax.swing.JMenuItem();
@@ -136,7 +139,13 @@ public class sacpad_1 extends javax.swing.JFrame {
 
         jMenuItem18.setText("jMenuItem18");
 
+        fileChooser.setAcceptAllFileFilterUsed(false);
+        fileChooser.setDialogTitle("Open File");
+        fileChooser.setFileFilter(new CustomFileFilter());
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jTabbedPane1.setTabPlacement(javax.swing.JTabbedPane.LEFT);
 
         jMenuBar1.setBackground(new java.awt.Color(222, 222, 222));
         jMenuBar1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -155,14 +164,14 @@ public class sacpad_1 extends javax.swing.JFrame {
         });
         jMenu1.add(NewFile);
 
-        jMenuItem2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItem2.setText("Open");
-        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+        Open.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
+        Open.setText("Open");
+        Open.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem2ActionPerformed(evt);
+                OpenActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem2);
+        jMenu1.add(Open);
 
         jMenuItem3.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
         jMenuItem3.setText("Save");
@@ -404,52 +413,28 @@ public class sacpad_1 extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem14ActionPerformed
 
     private void NewFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NewFileActionPerformed
-//                   dispose();
-//                  sacpad_1 new_tab = new sacpad_1();
-//                  new_tab.setSize(1400,800);
-//                  new_tab.setLocationRelativeTo(null);
-//                  new_tab.setVisible(true);
-//                  
                     jTabbedPane1.addTab("untitled",new EditorNew() );
-                  // TODO add your handling code here:
     }//GEN-LAST:event_NewFileActionPerformed
 
-    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-                  
-        str4=" ";
-        FileDialog dialog=new FileDialog(this,"Open");
-        dialog.setVisible(true);
-
-        str1=dialog.getDirectory();
-        str2=dialog.getFile();
-        str3=str1+str2;
-        File f=new File(str3);
-        FileInputStream fobj = null;
-        
+    private void OpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OpenActionPerformed
+   
+        int returnVal = fileChooser.showOpenDialog(this);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+        File file = fileChooser.getSelectedFile();
         try {
-             fobj = new FileInputStream(f);
-         } 
-        catch (FileNotFoundException ex) {
-             Logger.getLogger(sacpad_1.class.getName()).log(Level.SEVERE, null, ex);
-         }
-        
-        len=(int)f.length();
-        
-        for(int j=0;j<len;j++)
-        {
-            char str5 = 0;
-            try {
-                str5 = (char)fobj.read();
-            } catch (IOException ex) {
-                Logger.getLogger(sacpad_1.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            str4=str4 + str5;
+            
+            EditorNew currTab=new EditorNew();
+            jTabbedPane1.addTab(file.getName(),currTab);
+            jTabbedPane1.setSelectedComponent(currTab);
+            // What to do with the file, e.g. display it in a TextArea
+          currTab.openFile(new FileReader(file.getAbsolutePath()));
+        } catch (IOException ex) {
+          System.out.println("problem accessing file"+file.getAbsolutePath());
         }
-
-//    textArea1.setText(str4);
-        
-                    
-    }//GEN-LAST:event_jMenuItem2ActionPerformed
+        } else {
+        System.out.println("File access cancelled by user.");
+        }
+    }//GEN-LAST:event_OpenActionPerformed
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
                  
@@ -620,6 +605,8 @@ f=new Font(fontName,Font.BOLD|Font.ITALIC,fontSize);
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem NewFile;
+    private javax.swing.JMenuItem Open;
+    private javax.swing.JFileChooser fileChooser;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu10;
     private javax.swing.JMenu jMenu11;
@@ -643,7 +630,6 @@ f=new Font(fontName,Font.BOLD|Font.ITALIC,fontSize);
     private javax.swing.JMenuItem jMenuItem17;
     private javax.swing.JMenuItem jMenuItem18;
     private javax.swing.JMenuItem jMenuItem19;
-    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem20;
     private javax.swing.JMenuItem jMenuItem21;
     private javax.swing.JMenuItem jMenuItem22;

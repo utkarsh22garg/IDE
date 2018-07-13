@@ -413,7 +413,7 @@ public class sacpad_1 extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem14ActionPerformed
 
     private void NewFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NewFileActionPerformed
-                    jTabbedPane1.addTab("untitled",new EditorNew() );
+        addTab("untitled");
     }//GEN-LAST:event_NewFileActionPerformed
 
     private void OpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OpenActionPerformed
@@ -423,9 +423,8 @@ public class sacpad_1 extends javax.swing.JFrame {
         File file = fileChooser.getSelectedFile();
         try {
             
-            EditorNew currTab=new EditorNew();
-            jTabbedPane1.addTab(file.getName(),currTab);
-            jTabbedPane1.setSelectedComponent(currTab);
+            EditorNew currTab=addTab(file.getName());
+            
             // What to do with the file, e.g. display it in a TextArea
           currTab.openFile(new FileReader(file.getAbsolutePath()));
         } catch (IOException ex) {
@@ -651,4 +650,12 @@ f=new Font(fontName,Font.BOLD|Font.ITALIC,fontSize);
     private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem4;
     private javax.swing.JTabbedPane jTabbedPane1;
     // End of variables declaration//GEN-END:variables
+
+    private EditorNew addTab(String title) {
+        EditorNew newTab= new EditorNew();
+        jTabbedPane1.addTab(title,newTab);
+        jTabbedPane1.setTabComponentAt(jTabbedPane1.indexOfComponent(newTab),new ButtonTabComponent(jTabbedPane1));
+        jTabbedPane1.setSelectedComponent(newTab);
+        return newTab;
+    }
 }

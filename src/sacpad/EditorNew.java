@@ -5,6 +5,9 @@
  */
 package sacpad;
 
+import java.io.IOException;
+import java.io.Reader;
+
 /**
  *
  * @author utkarsh
@@ -17,7 +20,12 @@ public class EditorNew extends javax.swing.JPanel {
     public EditorNew() {
         initComponents();
     }
-
+    
+    public void  openFile(Reader reader) throws IOException
+    {
+        jTextArea1.read(reader,null);
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
